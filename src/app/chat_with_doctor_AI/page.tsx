@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { socket } from "../../socket";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+
+const router = useRouter();
 
 const ChatWithDoctorAI = () => {
   const [messages, setMessages] = useState([
@@ -41,7 +44,6 @@ const ChatWithDoctorAI = () => {
   const handleSave = () => {
     const formattedMessages = JSON.stringify(messages, null, 2); 
     console.log(formattedMessages, "this is the formatted message")
-    // Pretty-print the messages array for readability
   
     const prompt = `
       You will be given a text conversation between an AI and a patient, where the patient describes symptoms and the AI provides suggestions, medicines, and medical advice.
@@ -70,7 +72,9 @@ const ChatWithDoctorAI = () => {
   
         const addingSymptom = await axios.post("/api/symptom", {res, userId})
         console.log("added", addingSymptom)
-        alert("aeeded")
+        alert("aedded Later will be viewed by doctor")
+        router.push('/patient-dashboard')
+        router
       } catch (error) {
         console.log("this is the thing error thing", error)
       }

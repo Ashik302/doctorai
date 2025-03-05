@@ -19,10 +19,10 @@ const DoctorRegistration = () => {
   const [dorData, setDorData] = useState<FieldValues | undefined>(undefined);
   const [userInput, setUserInput] = useState(String);
   const [conversation, setConversation] = useState<ConversationMessage[]>([]);
-  const [countdown, setCountdown] = useState(120); // Countdown starts from 120 seconds
+  const [countdown, setCountdown] = useState(120); 
   const [showPopup, setShowPopup] = useState(false);
-  const [isTimerEnded, setIsTimerEnded] = useState(false); // Track if the timer ended
-  const [isSubmitting, setIsSubmitting] = useState(false); // Track if the form is being submitted
+  const [isTimerEnded, setIsTimerEnded] = useState(false); 
+  const [isSubmitting, setIsSubmitting] = useState(false); 
 
   const router = useRouter();
 
@@ -33,19 +33,19 @@ const DoctorRegistration = () => {
   } = useForm();
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    if (isSubmitting) return; // Prevent resubmission if already submitting
+    if (isSubmitting) return; 
 
-    setIsSubmitting(true); // Disable the register button during submission
+    setIsSubmitting(true); 
 
     console.log("Doctor Registration Data:", data);
     setDorData(data)
     const doctorData = JSON.stringify(data, null, 2);
     setConversation([{ sender: "doctor", message: doctorData }]);
 
-    // Emit doctor registration prompt to the server
+    
     socket.emit("doctor-regi", { prompt: doctorData });
 
-    // Listen for the first response from the server
+    
     socket.once("doctor-test", ({ response }) => {
       console.log("This is the initial response from AI:", response);
       setConversation((prev) => [...prev, { sender: "ai", message: response }]);
@@ -53,44 +53,47 @@ const DoctorRegistration = () => {
     });
   };
 
-  const startConversationTimer = () => {
-    setShowPopup(true);
+const startConversationTimer = () => {
+  setShowPopup(true);
 
-    // Countdown timer logic
-    const countdownInterval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(countdownInterval);
-          setIsTimerEnded(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 400);
+  
+  setCountdown(100);
 
-    setTimeout(() => {
-      clearInterval(countdownInterval);
-      setIsTimerEnded(true);
-    }, 30000);
-  };
+  
+  const countdownInterval = setInterval(() => {
+    setCountdown((prev) => {
+      if (prev <= 1) {
+        clearInterval(countdownInterval);
+        setIsTimerEnded(true);
+        return 0;
+      }
+      return prev - 1;
+    });
+  }, 1000); 
+
+  setTimeout(() => {
+    clearInterval(countdownInterval);
+    setIsTimerEnded(true);
+  }, 100000); 
+};
 
   const handleUserResponse = () => {
-    if (!userInput.trim()) return; // Don't send empty input
-    if (isTimerEnded) return; // Prevent sending if the timer has ended
+    if (!userInput.trim()) return; 
+    if (isTimerEnded) return; 
 
-    // Add the user's input to the conversation
+    
     setConversation((prev) => [
       ...prev,
       { sender: "user", message: userInput },
     ]);
 
-    // Emit the user's response as the new prompt for the AI
+    
     socket.emit("doctor-regi", { prompt: userInput });
 
-    // Clear the user input field
-    setUserInput(String);
+    
+    setUserInput('');
 
-    // Wait for the AI response
+    
     socket.once("doctor-test", ({ response }) => {
       console.log("AI Response:", response);
       setConversation((prev) => [
@@ -120,11 +123,11 @@ const DoctorRegistration = () => {
           const name = dorData?.name.replace(/\s+/g, '').toLowerCase();
           if (name) {
             alert('you are no qualified enough');
-            router.push(`http://dr${name}.localhost:3000`); // Correct the URL structure
+            router.push(`http://dr${name}.localhost:3000`); 
           }
           alert('you are no qualified enough');
-          router.push(`http://dr${name}.localhost:3000`); // Correct the URL structure
-          // router.push('/');
+          router.push(`http://dr${name}.localhost:3000`); 
+          
         } else {
         }
       } catch (error) {
@@ -298,7 +301,7 @@ const DoctorRegistration = () => {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div
               className="w-full max-w-3xl bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 space-y-4"
-              style={{ maxHeight: "85%", overflowY: "auto" }} // Adjusted height and scrollability
+              style={{ maxHeight: "85%", overflowY: "auto" }} 
             >
               <h3 className="text-xl font-semibold mb-4">Doctor Registration in Progress</h3>
               <p className="mb-4">This conversation will last for {countdown} seconds.</p>
@@ -307,7 +310,7 @@ const DoctorRegistration = () => {
                 style={{ backgroundColor: "#f9f9f9" }}
               >
                 {conversation
-                  .filter((msg) => msg.sender !== "doctor") // Don't show user details
+                  .filter((msg) => msg.sender !== "doctor") 
                   .map((msg, index) => (
                     <div key={index} className={msg.sender === "user" ? "text-right" : "text-left"}>
                       <p
@@ -328,12 +331,12 @@ const DoctorRegistration = () => {
                   onChange={(e) => setUserInput(e.target.value)}
                   className="w-full p-3 border rounded-md shadow-sm"
                   placeholder="Type your response..."
-                  disabled={isTimerEnded} // Disable input when the timer ends
+                  disabled={isTimerEnded} 
                 />
                 <button
                   onClick={handleUserResponse}
                   className="mt-2 w-full p-3 bg-blue-500 text-white font-semibold rounded-md"
-                  disabled={isTimerEnded} // Disable button when the timer ends
+                  disabled={isTimerEnded} 
                 >
                   Send Response
                 </button>
