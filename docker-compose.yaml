@@ -1,0 +1,27 @@
+services:
+  app:
+    # Build the app from the current directory and Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      # Map port 3000 inside the container to port 3000 on the host machine
+      - "3000:3000"
+    depends_on:
+      - mysql-db  # Ensure the app starts only after the MySQL container is up
+    environment:
+      # Set environment variables for DB connection in your app (Next.js)
+      DATABASE_URL: mysql://root:ashikkoirala%40123@mysql-db:3306/doctorai
+
+  mysql-db:
+    image: mysql:8.0.35
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ashikkoirala@123  # Set the root password for MySQL
+      MYSQL_DATABASE: doctorai # Database name for the app (make sure this matches your DB in Prisma)
+    volumes:
+      - mysql:/var/lib/mysql  # Persistent storage for MySQL data
+
+# Define a named volume for MySQL data persistence
+volumes:
+  mysql: ~

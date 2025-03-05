@@ -1,101 +1,135 @@
-import Image from "next/image";
+"use client";
+import animationData from "./../../public/AD.json";
+import dynamic from "next/dynamic";
+// import Lottie from "react-lottie-player";
+import Link from "next/link";
+import RegisteredDoctors from "./Components/Doctor";
+import { motion } from "framer-motion";
+
+const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="container t-20 min-h-screen flex flex-col w-full md:w-[85%] mx-auto"
+    >
+      <br />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      {/* Hero Section */}
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="flex-grow flex items-center pt-24"
+      >
+        <div className="flex flex-col md:flex-row items-center w-full">
+          {/* Left Content */}
+          <motion.div
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="text-left md:w-1/2 space-y-4 px-4 md:px-0"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-pink-500 to-purple-600 text-transparent bg-clip-text">
+              Revolutionizing Healthcare with AI
+            </h2>
+            <p className="text-gray-600 text-lg">
+              Empowering patients and healthcare providers with intelligent tools to enhance diagnostics, triage, and resource management.
+            </p>
+            <br />
+            <a
+              href="/patient-form"
+              className="px-6 py-3 bg-gradient-to-r from-pink-500 to-blue-600 text-white font-semibold rounded-md shadow-md hover:shadow-lg hover:scale-105 transition-all"
+            >
+              Get Started
+            </a>
+          </motion.div>
+
+          {/* Right Content (Animation) */}
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="w-full md:w-1/2 flex justify-center mt-8 md:mt-0"
+          >
+            <Lottie
+              loop
+              animationData={animationData}
+              play
+              style={{ width: "100%", height: "auto", maxWidth: 300 }}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </motion.div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </motion.div>
+
+      {/* Features Section */}
+      <motion.div
+        initial={{ y: 50, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        id="features"
+        className="w-full py-16 bg-gradient-to-r from-blue-50 to-pink-50 shadow-md mt-10"
+      >
+        <div className="mx-auto px-4">
+          <h3 className="text-3xl font-bold text-blue-700 mb-6 text-center">
+            Key Features
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[{
+              title: "Chat with Doctor AI",
+              description:
+                "Engage with Doctor AI for personalized healthcare advice in a conversational and interactive experience.",
+              link: "/chat_with_doctor_AI",
+            },
+            {
+              title: "Nearby Clinics",
+              description:
+                "Locate nearby doctors and pharmacies based on your current location.",
+              link: "/nearby-clinics",
+            },
+            {
+              title: "Patient Dashboard",
+              description:
+                "Comprehensive dashboards for providers to track and manage patient cases.",
+              link: "/patient-dashboard",
+            }].map((feature, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Link href={feature.link}>
+                  <div className="bg-white p-6 rounded-md shadow hover:shadow-lg transition-all cursor-pointer">
+                    <h4 className="text-xl md:text-2xl font-semibold text-blue-700">
+                      {feature.title}
+                    </h4>
+                    <p className="text-gray-600 mt-4">{feature.description}</p>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Doctors Section */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1 }}
+      >
+        <RegisteredDoctors />
+      </motion.div>
+    </motion.div>
   );
 }
+
+
+
+

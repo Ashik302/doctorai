@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model User {
+  userId Int @id @default(autoincrement())
+  name String
+  email String @unique
+  phoneNumber String
+  Address String
+  symptom Symptom[]
+  appointment Appointment[]
+}
+
+model Appointment {
+  id            Int      @id @default(autoincrement())
+  date          String
+  time          String
+  status        String   @default("Pending") 
+  reason        String? 
+  user          User     @relation(fields: [userId], references: [userId])
+  userId        Int
+  doctor        Doctor   @relation(fields: [doctorId], references: [id])
+  doctorId      Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Doctor {
+  id Int @id @default(autoincrement())
+  name String 
+  email String @unique
+  location String
+  experience Int
+  phoneNumber String
+  specialization String
+  qualification String
+  resultDesc String
+  loginCode String  @default("")
+  review Review[]
+  appointment Appointment[]
+  reviewVote ReviewVote[]
+}
+
+
+model Symptom {
+  symptomId Int @id @default(autoincrement())
+  summery String @db.Text
+  user User @relation(fields: [userId], references: [userId])
+  userId Int
+  review Review[] @relation("SymptomReviewedByDoctor")
+}
+
+model Review {
+  id Int @id @default(autoincrement())
+  content String
+  voteCount Int @default(0)
+  createdBy Doctor @relation(fields: [doctorId], references: [id])
+  doctorId Int
+  symptom Symptom @relation("SymptomReviewedByDoctor", fields: [symptomId], references: [symptomId], onDelete: Cascade)
+  symptomId Int
+  reviewVote ReviewVote[]
+}
+
+model ReviewVote {
+  id Int @id @default(autoincrement())
+  createBy Doctor @relation(fields: [createdById], references: [id])
+  createdById Int
+  createdTo Review @relation(fields: [createdToId], references: [id])
+  createdToId Int
+}
